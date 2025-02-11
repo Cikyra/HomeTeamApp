@@ -4,7 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.navigation.toRoute
 import com.cikyra.hometeam.compose.nav.AppRoutes
-import com.cikyra.hometeam.data.repo.HomeScreenRepository
+import com.cikyra.hometeam.data.repo.features.home.HomeScreenRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -17,7 +17,5 @@ class HomeScreenViewModel @Inject constructor(
 ): ViewModel() {
 
     val exampleId: AppRoutes.HomeScreen = savedStateHandle.toRoute<AppRoutes.HomeScreen>()
-
-    val greeting = homeScreenRepo.returnGreeting()
 }
 

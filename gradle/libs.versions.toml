@@ -39,6 +39,7 @@ hilt-navigation-compose = "1.2.0"
 navigationCompose = "2.8.5"
 hiltAndroid = "2.54"
 roomRuntime = "2.6.1"
+kotlinxDatetime = "0.6.1"
 kotlinxSerializationJson = "1.7.3"
 kotlinSerializationPlugin = "2.1.0"
 
@@ -89,7 +90,7 @@ androidx-navigation-compose = { module = "androidx.navigation:navigation-compose
 androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hilt-navigation-compose" }
 androidx-lifecycle-viewmodelcompose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "androidxLifecycle" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
-
+kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
 
 # Testing Deps
 junit = { module = "junit:junit", version.ref = "junit" }

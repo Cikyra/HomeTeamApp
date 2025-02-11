@@ -16,6 +16,6 @@ fun HomeScreen(
         verticalArrangement = Arrangement.Center,
         modifier = Modifier.fillMaxWidth()
     ) {
-        Text("HOME SCREEN: ${viewModel.greeting}: NAV ID: ${viewModel.exampleId}")
+        Text("HOME SCREEN: NAV ID: ${viewModel.exampleId}")
     }
 }

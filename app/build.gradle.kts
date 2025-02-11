@@ -87,7 +87,7 @@ dependencies {
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.androidx.lifecycle.viewmodelcompose)
     implementation(libs.kotlinx.serialization.json)
-
+    implementation(libs.kotlinx.datetime)
 
     // Testing
     testImplementation(libs.junit)
