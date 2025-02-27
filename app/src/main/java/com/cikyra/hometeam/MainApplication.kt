@@ -1,7 +1,66 @@
 package com.cikyra.hometeam
 
 import android.app.Application
+import android.content.SharedPreferences
+import com.cikyra.hometeam.data.datasource.local.HomeTeamLocalDataSource
+import com.cikyra.hometeam.data.model.domain.Announcement
+import com.cikyra.hometeam.data.model.domain.School
+import com.cikyra.hometeam.utils.AppPreferences
+import com.cikyra.hometeam.utils.now
 import dagger.hilt.android.HiltAndroidApp
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.datetime.LocalDateTime
+import java.util.UUID
+import javax.inject.Inject
 
 @HiltAndroidApp
-class MainApplication: Application()
+class MainApplication: Application() {
+
+    @Inject lateinit var localDataSource: HomeTeamLocalDataSource
+    @Inject lateinit var sharedPreferences: SharedPreferences
+
+    override fun onCreate() {
+        super.onCreate()
+
+        val isFirstLaunch = sharedPreferences.getBoolean(AppPreferences.FIRST_LAUNCH, true)
+        if (isFirstLaunch) {
+            CoroutineScope(Dispatchers.IO).launch {
+                seedDB()
+            }
+
+            sharedPreferences.edit().putBoolean(AppPreferences.FIRST_LAUNCH, false).apply()
+        }
+    }
+
+    private suspend fun seedDB() {
+        val school = School(
+            id = UUID.randomUUID().toString(),
+            name = "Jujutsu High",
+            address = "145 SomewhereInTokyo",
+            classes = emptyList(),
+            events = emptyList(),
+            announcements = emptyList(),
+            users = emptyList(),
+            levels = emptyList(),
+            createdAt = LocalDateTime.now(),
+            updatedAt = LocalDateTime.now()
+        )
+
+        localDataSource.createSchool(school)
+
+        val announcement = Announcement(
+            id = UUID.randomUUID().toString(),
+            schoolId = school.id,
+            title = "Gojo is still alive",
+            subtitle = "Copium",
+            body = "MAPPA will fix this",
+            photoUrl = null,
+            createdAt = LocalDateTime.now(),
+            updatedAt = LocalDateTime.now()
+        )
+
+        localDataSource.createAnnouncement(announcement)
+    }
+}

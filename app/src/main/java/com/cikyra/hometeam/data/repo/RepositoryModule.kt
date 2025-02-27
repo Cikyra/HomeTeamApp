@@ -1,5 +1,6 @@
  package com.cikyra.hometeam.data.repo
 
+ import com.cikyra.hometeam.data.datasource.local.HomeTeamLocalDataSource
  import com.cikyra.hometeam.data.repo.features.home.HomeScreenRepository
  import com.cikyra.hometeam.data.repo.features.home.impl.HomeScreenRepositoryImpl
  import dagger.Module
@@ -13,7 +14,7 @@
  object RepositoryModule {
     @Singleton
     @Provides
-    fun provideHomeScreenRepository(): HomeScreenRepository {
-        return HomeScreenRepositoryImpl()
+    fun provideHomeScreenRepository(localDataSource: HomeTeamLocalDataSource): HomeScreenRepository {
+        return HomeScreenRepositoryImpl(localDataSource)
     }
  }

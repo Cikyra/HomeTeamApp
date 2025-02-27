@@ -1,4 +1,4 @@
-package com.cikyra.hometeam.data.model
+package com.cikyra.hometeam.data.model.domain
 
 import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Serializable
@@ -10,9 +10,9 @@ data class School(
     val address: String,
     val classes: List<String>,
     val events: List<String>,
-    val announcements: List<String>,
+    val announcements: List<Announcement>,
     val users: List<String>,
     val levels: List<String>,
     val createdAt: LocalDateTime,
-    val updatedAt: LocalDateTime,
-    )
+    val updatedAt: LocalDateTime
+)

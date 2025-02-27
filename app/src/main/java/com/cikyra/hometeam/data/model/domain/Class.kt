@@ -1,4 +1,4 @@
-package com.cikyra.hometeam.data.model
+package com.cikyra.hometeam.data.model.domain
 
 import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.SerialName
@@ -9,10 +9,7 @@ data class Class(
     val id: String,
     val title: String,
     val subtitle: String? = null,
-
-    //schedule
-
-
+    val schedule: Schedule,
     val active: Boolean,
     val description: String? = null,
     @SerialName("photo_urls") val photoUrls: List<String>? = null,
