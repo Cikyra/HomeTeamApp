@@ -9,7 +9,6 @@ import com.cikyra.hometeam.compose.nav.AppRoutes
 import com.cikyra.hometeam.data.model.domain.Announcement
 import com.cikyra.hometeam.data.repo.features.home.HomeScreenRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flow
@@ -26,11 +25,10 @@ class HomeScreenViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ): ViewModel() {
 
-    val exampleId: AppRoutes.HomeScreen = savedStateHandle.toRoute<AppRoutes.HomeScreen>()
+    val exampleId: AppRoutes.Home = savedStateHandle.toRoute<AppRoutes.Home>()
 
     val uiState: StateFlow<HomeScreenState> = flow {
         emit(HomeScreenState.Loading)
-        //delay(3000L)
         val result = homeScreenRepo.getAnnouncements()
         if(result.isFailure) {
             Log.e("HomeScreenViewModel", "Error fetching announcements: ${result.exceptionOrNull()?.message}")

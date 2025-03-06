@@ -1,8 +1,9 @@
 package com.cikyra.hometeam.theme
 
 import androidx.compose.ui.graphics.Color
+import com.cikyra.hometeam.R
 
-val md_theme_light_primary = Color(0xFF6D23F9)
+val md_theme_light_primary = Color(0xFFD14C4C)
 val md_theme_light_onPrimary = Color(0xFFFFFFFF)
 val md_theme_light_primaryContainer = Color(0xFFE8DDFF)
 val md_theme_light_onPrimaryContainer = Color(0xFF22005D)
@@ -31,7 +32,7 @@ val md_theme_light_inversePrimary = Color(0xFFCFBDFF)
 val md_theme_light_shadow = Color(0xFF000000)
 val md_theme_light_surfaceTint = Color(0xFF6D23F9)
 
-val md_theme_dark_primary = Color(0xFFCFBDFF)
+val md_theme_dark_primary = Color(0xFFD14C4C)
 val md_theme_dark_onPrimary = Color(0xFF3A0093)
 val md_theme_dark_primaryContainer = Color(0xFF5300CD)
 val md_theme_dark_onPrimaryContainer = Color(0xFFE8DDFF)

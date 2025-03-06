@@ -7,12 +7,15 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.cikyra.hometeam.compose.composables.BottomNavBar
+import com.cikyra.hometeam.compose.composables.HomeTeamTopAppBar
 import com.cikyra.hometeam.compose.nav.AppRoutes
 import com.cikyra.hometeam.theme.HomeTeamTheme
 import com.cikyra.hometeam.compose.features.home.HomeScreen
@@ -30,23 +33,39 @@ class MainActivity : ComponentActivity(){
             val currentDestination = navBackStackEntry?.destination
         
             HomeTeamTheme {                                   
-                Scaffold(modifier= Modifier.fillMaxSize()) { innerPadding ->
+                Scaffold(
+                    modifier= Modifier.fillMaxSize(),
+                    bottomBar = { BottomNavBar(navController) },
+                    topBar = { HomeTeamTopAppBar() }
+                ) { innerPadding ->
 
                     NavHost(
                         navController = navController,
-                        startDestination = AppRoutes.SplashScreen,
+                        startDestination = AppRoutes.home,
                         modifier = Modifier.padding(innerPadding)
                     ) {
                         composable<AppRoutes.SplashScreen> {
                             SplashScreen(
-                                onLetsGoClicked = { id ->
-                                    navController.navigate(AppRoutes.HomeScreen(id))
+                                onLetsGoClicked = { _ ->
+                                    navController.navigate(AppRoutes.home)
                                 }
                             )
                         }
-                        composable<AppRoutes.HomeScreen> {
+                        composable<AppRoutes.Home> {
                             HomeScreen()
-                        }                   
+                        }
+                        composable<AppRoutes.Schedule> {
+                            Text("Schedule Screen")
+                        }
+                        composable<AppRoutes.Report> {
+                            Text("Report Screen")
+                        }
+                        composable<AppRoutes.Videos> {
+                            Text("Videos Screen")
+                        }
+                        composable<AppRoutes.Shop> {
+                            Text("Shop Screen")
+                        }
                     }
                 }
             }
