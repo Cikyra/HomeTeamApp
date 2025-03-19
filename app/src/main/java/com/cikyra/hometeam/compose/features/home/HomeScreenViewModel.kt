@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.cikyra.hometeam.compose.nav.AppRoutes
 import com.cikyra.hometeam.data.model.domain.Announcement
+import com.cikyra.hometeam.data.model.domain.Event
 import com.cikyra.hometeam.data.repo.features.home.HomeScreenRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
@@ -29,12 +30,25 @@ class HomeScreenViewModel @Inject constructor(
 
     val uiState: StateFlow<HomeScreenState> = flow {
         emit(HomeScreenState.Loading)
-        val result = homeScreenRepo.getAnnouncements()
-        if(result.isFailure) {
-            Log.e("HomeScreenViewModel", "Error fetching announcements: ${result.exceptionOrNull()?.message}")
-            emit(HomeScreenState.Error(result.exceptionOrNull()?.message))
+        val announcementsResult = homeScreenRepo.getAnnouncements()
+        if(announcementsResult.isFailure) {
+            Log.e("HomeScreenViewModel", "Error fetching announcements: ${announcementsResult.exceptionOrNull()?.message}")
+            emit(HomeScreenState.Error(announcementsResult.exceptionOrNull()?.message))
         } else {
-            emit(HomeScreenState.Loaded(result.getOrDefault(emptyList())))
+            emit(HomeScreenState.Loaded(
+                announcements = announcementsResult.getOrDefault(emptyList()),
+                events = emptyList()
+            ))
+        }
+        val eventsResult = homeScreenRepo.getEvents()
+        if(eventsResult.isFailure) {
+            Log.e("HomeScreenViewModel", "Error fetching events: ${eventsResult.exceptionOrNull()?.message}")
+            emit(HomeScreenState.Error(eventsResult.exceptionOrNull()?.message))
+        } else {
+            emit(HomeScreenState.Loaded(
+                announcements = announcementsResult.getOrDefault(emptyList()),
+                events = eventsResult.getOrDefault(emptyList())
+            ))
         }
     }.onStart {
         Log.d("HomeScreenViewModel", "Get Announcements Flow Started")
@@ -54,7 +68,7 @@ class HomeScreenViewModel @Inject constructor(
 
 sealed interface HomeScreenState {
     data object Loading : HomeScreenState
-    data class Loaded(val announcements: List<Announcement>) : HomeScreenState
+    data class Loaded(val announcements: List<Announcement>, val events: List<Event>) : HomeScreenState
     data class Error(val message: String?) : HomeScreenState
 }
 

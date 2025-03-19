@@ -22,7 +22,9 @@ object RoomModule {
             context,
             HomeTeamDatabase::class.java,
             "hometeam.db",
-        ).build()
+        )
+        .fallbackToDestructiveMigration() // TODO: REMOVE BEFORE LAUNCH
+        .build()
     }
 
     @Singleton
@@ -34,4 +36,8 @@ object RoomModule {
     @Singleton
     @Provides
     fun provideAnnouncementDao(db: HomeTeamDatabase) = db.getAnnouncementDao()
+
+    @Singleton
+    @Provides
+    fun provideEventDao(db: HomeTeamDatabase) = db.getEventDao()
 }

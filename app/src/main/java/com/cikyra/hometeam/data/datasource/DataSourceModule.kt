@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.cikyra.hometeam.data.datasource.local.HomeTeamLocalDataSource
 import com.cikyra.hometeam.data.datasource.local.dao.AnnouncementDao
+import com.cikyra.hometeam.data.datasource.local.dao.EventDao
 import com.cikyra.hometeam.data.datasource.local.dao.SchoolDao
 import com.cikyra.hometeam.data.datasource.local.impl.HomeTeamLocalDataSourceImpl
 import dagger.Module
@@ -21,11 +22,13 @@ object DataSourceModule {
     @Provides
     fun provideHomeTeamLocalDataSource(
         schoolDao: SchoolDao,
-        announcementDao: AnnouncementDao
+        announcementDao: AnnouncementDao,
+        eventDao: EventDao
     ): HomeTeamLocalDataSource {
         return HomeTeamLocalDataSourceImpl(
             schoolDao,
-            announcementDao
+            announcementDao,
+            eventDao
         )
     }
 

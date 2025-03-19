@@ -4,6 +4,8 @@ import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,7 +17,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.ListItem
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
@@ -29,7 +33,11 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.cikyra.hometeam.R
+import com.cikyra.hometeam.compose.composables.HomeTeamHeaderListView
+import com.cikyra.hometeam.compose.composables.HomeTeamHeaderListViewItem
+import com.cikyra.hometeam.compose.composables.MyWeekView
 import com.cikyra.hometeam.data.model.domain.Announcement
+import com.cikyra.hometeam.data.model.domain.Event
 
 @Composable
 fun HomeScreen(
@@ -38,10 +46,13 @@ fun HomeScreen(
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    Column(
-        verticalArrangement = Arrangement.Center,
-        modifier = Modifier.fillMaxWidth().padding(16.dp)
-    ) {
+//    Column(
+//        verticalArrangement = Arrangement.Center,
+//        modifier = Modifier
+//            .fillMaxWidth()
+//            .padding(16.dp)
+//            .verticalScroll(rememberScrollState())
+//    ) {
         when (val state = uiState) {
             HomeScreenState.Loading -> {
                 Box(modifier = Modifier.fillMaxSize()) {
@@ -49,72 +60,80 @@ fun HomeScreen(
                 }
             }
             is HomeScreenState.Loaded -> {
-                HomeScreenContent(announcements = state.announcements)
+                HomeScreenContent(
+                    announcements = state.announcements,
+                    events = state.events
+                )
             }
             is HomeScreenState.Error -> {
-                Toast.makeText(LocalContext.current, "Error loading pantry items: ${state.message}", Toast.LENGTH_LONG).show()
+                Log.e("HomeScreen", "Error: ${state.message}")
+                Toast.makeText(LocalContext.current, "Error loading HomeScreen", Toast.LENGTH_LONG).show()
             }
         }
-    }
+//    }
 }
 
 @Composable
-fun HomeScreenContent(announcements: List<Announcement>) {
-    Text(stringResource(R.string.my_week), style = MaterialTheme.typography.headlineMedium)
-    Row(modifier = Modifier.fillMaxWidth()
-        .height(50.dp)
-        .padding(top = 2.dp, bottom = 2.dp)
-        .background(MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(12.dp))
+fun HomeScreenContent(
+    announcements: List<Announcement>,
+    events: List<Event>
+) {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 24.dp, top = 4.dp, end = 24.dp, bottom = 16.dp)
     ) {
-        Text(
-            text = "Thursday March 6 - 4:30pm",
-            modifier = Modifier.align(Alignment.CenterVertically).padding(start = 8.dp),
-            color = MaterialTheme.colorScheme.onPrimary
-        )
-    }
-    Row(modifier = Modifier.fillMaxWidth()
-        .height(50.dp)
-        .padding(top = 2.dp, bottom = 2.dp)
-        .background(MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(12.dp))
-    ) {
-        Text(
-            text = "Friday March 7 - 5:30pm",
-            modifier = Modifier.align(Alignment.CenterVertically).padding(start = 8.dp),
-            color = MaterialTheme.colorScheme.onPrimary
-        )
-    }
-    Row(modifier = Modifier.fillMaxWidth()
-        .height(50.dp)
-        .padding(top = 2.dp, bottom = 2.dp)
-        .background(MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(12.dp))
-    ) {
-        Text(
-            text = "Saturday March 8 - 3:30pm",
-            modifier = Modifier.align(Alignment.CenterVertically).padding(start = 8.dp),
-            color = MaterialTheme.colorScheme.onPrimary
-        )
-    }
-    Text(stringResource(R.string.announcements), style = MaterialTheme.typography.headlineMedium)
-    LazyColumn {
-        items(items = announcements, key = { announcement -> announcement.id}) { announcement ->
-            ListItem(modifier = Modifier.fillMaxWidth().padding(4.dp).clickable {
-                Log.d("HomeScreen", "Item clicked: ${announcement.subtitle}")
-            },
-                headlineContent = { Text(text = announcement.title)},
-                supportingContent = { Text(text = announcement.body)}
-            )
+        // MY WEEK
+        item {
+            MyWeekView()
         }
-    }
-    Text(stringResource(R.string.events), style = MaterialTheme.typography.headlineMedium)
-    LazyColumn {
-        items(items = announcements, key = { announcement -> announcement.id}) { announcement ->
-            ListItem(modifier = Modifier.fillMaxWidth().padding(4.dp).clickable {
-                Log.d("HomeScreen", "Item clicked: ${announcement.subtitle}")
-            },
-                headlineContent = { Text(text = announcement.title)},
-                supportingContent = { Text(text = announcement.body)}
-            )
-        }
-    }
 
+        // Announcements Section
+        item {
+            Box(modifier = Modifier.padding(start = 0.dp, top = 24.dp, end = 0.dp, bottom = 0.dp)) {
+                HomeTeamHeaderListView(
+                    header = stringResource(R.string.announcements),
+                    items = announcements.map {
+                        HomeTeamHeaderListViewItem(
+                            id = it.id,
+                            title = it.title,
+                            subtitle = it.subtitle
+                        )
+                    },
+                    onItemClicked = { id ->
+                        // TODO: Navigate to AnnouncementDetailScreen once it exists
+                        Log.d("HomeScreen", "Announcement clicked: $id")
+                    },
+                    onArrowClicked = {
+                        // TODO: Navigate to AllAnnouncementsScreen once it exists
+                        Log.d("HomeScreen", "Announcements Arrow Clicked")
+                    }
+                )
+            }
+        }
+
+        // Events Section
+        item {
+            Box(modifier = Modifier.padding(start = 0.dp, top = 16.dp, end = 0.dp, bottom = 0.dp)) {
+                HomeTeamHeaderListView(
+                    header = stringResource(R.string.events),
+                    items = events.map {
+                        HomeTeamHeaderListViewItem(
+                            id = it.id,
+                            title = it.title,
+                            subtitle = it.subtitle
+                        )
+                    },
+                    onItemClicked = { id ->
+                        // TODO: Navigate to EventDetailScreen once it exists
+                        Log.d("HomeScreen", "Event clicked: $id")
+                    },
+                    onArrowClicked = {
+                        // TODO: Navigate to AllEventsScreen once it exists
+                        Log.d("HomeScreen", "Events Arrow Clicked")
+                    }
+                )
+            }
+        }
+    }
 }

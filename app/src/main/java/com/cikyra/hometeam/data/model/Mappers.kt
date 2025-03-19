@@ -1,8 +1,10 @@
 package com.cikyra.hometeam.data.model
 
 import com.cikyra.hometeam.data.model.domain.Announcement
+import com.cikyra.hometeam.data.model.domain.Event
 import com.cikyra.hometeam.data.model.domain.School
 import com.cikyra.hometeam.data.model.local.AnnouncementEntity
+import com.cikyra.hometeam.data.model.local.EventEntity
 import com.cikyra.hometeam.data.model.local.SchoolEntity
 import java.util.UUID
 
@@ -62,3 +64,40 @@ fun Announcement.toEntity(): AnnouncementEntity {
     )
 }
 
+fun EventEntity.toEvent(): Event {
+    return Event(
+        id = id.toString(),
+        schoolId = schoolId.toString(),
+        title = title,
+        subtitle = subtitle,
+        body = body,
+        // TODO: Add support for multiple photos
+        photoUrls = if (photoUrl != null) listOf(photoUrl) else emptyList(),
+        price = price,
+        createdAt = createdAt,
+        updatedAt = updatedAt
+    )
+}
+
+fun List<EventEntity>.toEvent(): List<Event> {
+    return this.map { it.toEvent() }
+}
+
+fun Event.toEntity(): EventEntity {
+    return EventEntity(
+        id = UUID.fromString(id),
+        schoolId = UUID.fromString(schoolId),
+        title = title,
+        subtitle = subtitle,
+        body = body,
+        price = price,
+        // TODO: Add support for multiple photos
+        photoUrl = photoUrls.firstOrNull(),
+        createdAt = createdAt,
+        updatedAt = updatedAt
+    )
+}
+
+fun List<Event>.toEntity(): List<EventEntity> {
+    return this.map { it.toEntity() }
+}

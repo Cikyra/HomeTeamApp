@@ -7,5 +7,6 @@
     <string name="shop">Shop</string>
     <string name="my_week">My Week</string>
     <string name="announcements">Announcements</string>
+    <string name="go_to_arrow">arrow icon to view all list content</string>
     <string name="events">Events</string>
 </resources>

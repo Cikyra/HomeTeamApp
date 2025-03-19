@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.SharedPreferences
 import com.cikyra.hometeam.data.datasource.local.HomeTeamLocalDataSource
 import com.cikyra.hometeam.data.model.domain.Announcement
+import com.cikyra.hometeam.data.model.domain.Event
 import com.cikyra.hometeam.data.model.domain.School
 import com.cikyra.hometeam.utils.AppPreferences
 import com.cikyra.hometeam.utils.now
@@ -14,6 +15,7 @@ import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDateTime
 import java.util.UUID
 import javax.inject.Inject
+import androidx.core.content.edit
 
 @HiltAndroidApp
 class MainApplication: Application() {
@@ -30,7 +32,7 @@ class MainApplication: Application() {
                 seedDB()
             }
 
-            sharedPreferences.edit().putBoolean(AppPreferences.FIRST_LAUNCH, false).apply()
+            sharedPreferences.edit() { putBoolean(AppPreferences.FIRST_LAUNCH, false) }
         }
     }
 
@@ -62,5 +64,18 @@ class MainApplication: Application() {
         )
 
         localDataSource.createAnnouncement(announcement)
+
+        val event = Event(
+            id = UUID.randomUUID().toString(),
+            schoolId = school.id,
+            title = "Come See Ethan Impulse Buy a SteamDeck",
+            subtitle = "Who needs a laptop!",
+            body = "The cats will love watching the gameplay on the tv!",
+            photoUrls = emptyList(),
+            createdAt = LocalDateTime.now(),
+            updatedAt = LocalDateTime.now()
+        )
+
+        localDataSource.createEvent(event)
     }
 }

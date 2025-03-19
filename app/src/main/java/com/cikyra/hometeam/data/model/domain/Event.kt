@@ -7,6 +7,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Event(
     val id: String,
+    @SerialName("school_id") val schoolId: String,
     val title: String,
     val subtitle: String,
     val body: String,
