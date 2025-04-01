@@ -4,19 +4,24 @@ import com.cikyra.hometeam.data.datasource.local.HomeTeamLocalDataSource
 import com.cikyra.hometeam.data.datasource.local.dao.AnnouncementDao
 import com.cikyra.hometeam.data.datasource.local.dao.EventDao
 import com.cikyra.hometeam.data.datasource.local.dao.SchoolDao
+import com.cikyra.hometeam.data.datasource.local.dao.UserDao
 import com.cikyra.hometeam.data.model.domain.Announcement
 import com.cikyra.hometeam.data.model.domain.Event
 import com.cikyra.hometeam.data.model.domain.School
+import com.cikyra.hometeam.data.model.domain.User
 import com.cikyra.hometeam.data.model.toAnnouncement
 import com.cikyra.hometeam.data.model.toEntity
 import com.cikyra.hometeam.data.model.toEvent
 import com.cikyra.hometeam.data.model.toSchool
+import com.cikyra.hometeam.data.model.toUser
+import java.util.UUID
 import javax.inject.Inject
 
 class HomeTeamLocalDataSourceImpl @Inject constructor(
     private val schoolDao: SchoolDao,
     private val announcementDao: AnnouncementDao,
-    private val eventDao: EventDao
+    private val eventDao: EventDao,
+    private val userDao: UserDao
 ): HomeTeamLocalDataSource {
 
     override suspend fun getSchool(): School {
@@ -47,5 +52,13 @@ class HomeTeamLocalDataSourceImpl @Inject constructor(
 
     override suspend fun createEvent(event: Event) {
         eventDao.insert(event.toEntity())
+    }
+
+    override suspend fun getUserById(userId: String): User {
+        return userDao.getUserById(UUID.fromString(userId)).toUser()
+    }
+
+    override suspend fun createUser(user: User) {
+        userDao.insert(user.toEntity())
     }
 }

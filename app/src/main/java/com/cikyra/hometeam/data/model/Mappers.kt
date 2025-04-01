@@ -3,9 +3,11 @@ package com.cikyra.hometeam.data.model
 import com.cikyra.hometeam.data.model.domain.Announcement
 import com.cikyra.hometeam.data.model.domain.Event
 import com.cikyra.hometeam.data.model.domain.School
+import com.cikyra.hometeam.data.model.domain.User
 import com.cikyra.hometeam.data.model.local.AnnouncementEntity
 import com.cikyra.hometeam.data.model.local.EventEntity
 import com.cikyra.hometeam.data.model.local.SchoolEntity
+import com.cikyra.hometeam.data.model.local.UserEntity
 import java.util.UUID
 
 // TODO: Do mappers for other entities, not emptyList()
@@ -100,4 +102,32 @@ fun Event.toEntity(): EventEntity {
 
 fun List<Event>.toEntity(): List<EventEntity> {
     return this.map { it.toEntity() }
+}
+
+fun User.toEntity(): UserEntity {
+    return UserEntity(
+        id = UUID.fromString(id),
+        schoolIds = schoolIds,
+        name = name,
+        childrenIds = children,
+        eventIds = registeredEvents,
+        classIds = registeredClasses,
+        photoUrl = photoUrl,
+        createdAt = createdAt,
+        updatedAt = updatedAt,
+    )
+}
+
+fun UserEntity.toUser(): User {
+    return User(
+        id = id.toString(),
+        schoolIds = schoolIds,
+        name = name,
+        photoUrl = photoUrl,
+        children = childrenIds,
+        registeredEvents = eventIds,
+        registeredClasses = classIds,
+        createdAt = createdAt,
+        updatedAt = updatedAt
+    )
 }

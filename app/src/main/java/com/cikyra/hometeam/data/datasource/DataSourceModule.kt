@@ -6,6 +6,7 @@ import com.cikyra.hometeam.data.datasource.local.HomeTeamLocalDataSource
 import com.cikyra.hometeam.data.datasource.local.dao.AnnouncementDao
 import com.cikyra.hometeam.data.datasource.local.dao.EventDao
 import com.cikyra.hometeam.data.datasource.local.dao.SchoolDao
+import com.cikyra.hometeam.data.datasource.local.dao.UserDao
 import com.cikyra.hometeam.data.datasource.local.impl.HomeTeamLocalDataSourceImpl
 import dagger.Module
 import dagger.Provides
@@ -23,12 +24,14 @@ object DataSourceModule {
     fun provideHomeTeamLocalDataSource(
         schoolDao: SchoolDao,
         announcementDao: AnnouncementDao,
-        eventDao: EventDao
+        eventDao: EventDao,
+        userDao: UserDao
     ): HomeTeamLocalDataSource {
         return HomeTeamLocalDataSourceImpl(
             schoolDao,
             announcementDao,
-            eventDao
+            eventDao,
+            userDao
         )
     }
 

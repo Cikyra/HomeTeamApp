@@ -40,4 +40,8 @@ object RoomModule {
     @Singleton
     @Provides
     fun provideEventDao(db: HomeTeamDatabase) = db.getEventDao()
+
+    @Singleton
+    @Provides
+    fun provideUserDao(db: HomeTeamDatabase) = db.getUserDao()
 }
